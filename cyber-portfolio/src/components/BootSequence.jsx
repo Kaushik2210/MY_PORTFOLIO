@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { soundEngine } from '../lib/soundEngine';
 
 const LINES = [
   '> initializing secure_session...',
@@ -20,7 +21,11 @@ export default function BootSequence({ onComplete }) {
 
     LINES.forEach((line, i) => {
       const t = setTimeout(() => {
-        if (!cancelled) setVisibleLines(prev => [...prev, line]);
+        if (!cancelled) {
+          setVisibleLines(prev => [...prev, line]);
+          if (line.includes('GRANTED')) soundEngine.granted();
+          else soundEngine.click(0.15);
+        }
       }, 600 + i * 700);
       timeouts.push(t);
     });

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { soundEngine } from '../lib/soundEngine';
 
 /* Canvas-based violent RGB glitch that fires on every section entry */
 export default function SectionGlitch() {
@@ -10,6 +11,7 @@ export default function SectionGlitch() {
 
     const triggerGlitch = (intensity = 1) => {
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      soundEngine.glitch(intensity);
       const canvas = canvasRef.current;
       if (!canvas) return;
 

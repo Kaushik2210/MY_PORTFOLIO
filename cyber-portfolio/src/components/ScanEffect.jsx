@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { soundEngine } from '../lib/soundEngine';
 
 /* Horizontal laser sweep that fires when a section enters view */
 export function SectionScanner({ sectionId, color = '#00f0ff' }) {
@@ -14,6 +15,7 @@ export function SectionScanner({ sectionId, color = '#00f0ff' }) {
       if (entry.isIntersecting && !fired.current) {
         fired.current = true;
         setScanning(true);
+        soundEngine.sweep();
         setTimeout(() => setScanning(false), 1400);
       }
     }, { threshold: 0.2 });
@@ -71,6 +73,9 @@ export function AccessAlert() {
           if (id !== lastSection.current && ALERTS[id]) {
             lastSection.current = id;
             setAlert(ALERTS[id]);
+            if (ALERTS[id].type === 'granted') soundEngine.granted();
+            else if (ALERTS[id].type === 'denied') soundEngine.denied();
+            else soundEngine.alert();
             setTimeout(() => setAlert(null), 1800);
           }
         }

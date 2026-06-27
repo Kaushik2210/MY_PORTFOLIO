@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { soundEngine } from '../lib/soundEngine';
 
 const SOC_LINES = [
   { text: '> Initializing SOC workstation...', delay: 0 },
@@ -28,7 +29,13 @@ export default function IntrusionOverlay({ onDone }) {
     let cum = 200;
     SOC_LINES.forEach((line, i) => {
       cum += line.delay;
-      timers.push(setTimeout(() => setVisible(v => [...v, i]), cum));
+      timers.push(setTimeout(() => {
+        setVisible(v => [...v, i]);
+        // [OK] lines get a beep; the final READY line gets startup chime
+        if (line.text.includes('[OK]')) soundEngine.beep(880, 0.06, 0.09);
+        else if (line.big) soundEngine.startup();
+        else if (line.text.startsWith('>')) soundEngine.click(0.12);
+      }, cum));
     });
     const finishT = setTimeout(() => {
       setDone(true);
