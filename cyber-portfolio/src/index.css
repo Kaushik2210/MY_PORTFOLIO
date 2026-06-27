@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --bg-primary: #0a0e0f;
+  --bg-secondary: #0d1117;
+  --accent-green: #39ff14;
+  --accent-cyan: #00f0ff;
+  --accent-red: #ff003c;
+  --text-primary: #e6e6e6;
+  --text-dim: #8b949e;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+@media (hover: none) { body { cursor: auto; } }
+
+#root { width: 100%; }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--accent-green); border-radius: 2px; }
+
+/* Scanline overlay */
+.scanlines::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.07) 2px,
+    rgba(0,0,0,0.07) 4px
+  );
+  pointer-events: none;
+  z-index: 9998;
+  animation: scanDrift 10s linear infinite;
+}
+
+@keyframes scanDrift {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100vh; }
+}
+
+.font-mono { font-family: 'JetBrains Mono', monospace !important; }
+
+.btn-terminal {
+  font-family: 'JetBrains Mono', monospace;
+  border: 1px solid var(--accent-green);
+  color: var(--accent-green);
+  background: transparent;
+  padding: 0.65rem 1.5rem;
+  cursor: none;
+  position: relative;
+  transition: all 0.2s;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  display: inline-block;
+  text-decoration: none;
+}
+.btn-terminal:hover {
+  background: rgba(57,255,20,0.08);
+  box-shadow: 0 0 20px rgba(57,255,20,0.25), inset 0 0 12px rgba(57,255,20,0.05);
+}
+.btn-terminal-cyan {
+  border-color: var(--accent-cyan) !important;
+  color: var(--accent-cyan) !important;
+}
+.btn-terminal-cyan:hover {
+  background: rgba(0,240,255,0.08) !important;
+  box-shadow: 0 0 20px rgba(0,240,255,0.25) !important;
+}
+
+.glow-green { text-shadow: 0 0 12px rgba(57,255,20,0.7), 0 0 40px rgba(57,255,20,0.3); }
+.glow-cyan  { text-shadow: 0 0 12px rgba(0,240,255,0.7), 0 0 40px rgba(0,240,255,0.3); }
+
+.section-prompt {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent-green);
+  font-size: 0.78rem;
+  opacity: 0.55;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.05em;
+}
+
+/* HUD corner brackets */
+.hud-card {
+  position: relative;
+}
+.hud-card::before,
+.hud-card::after,
+.hud-card .hud-br::before,
+.hud-card .hud-br::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: var(--accent-cyan);
+  border-style: solid;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.hud-card::before { top: -2px; left: -2px; border-width: 2px 0 0 2px; }
+.hud-card::after  { top: -2px; right: -2px; border-width: 2px 2px 0 0; }
+.hud-card:hover::before,
+.hud-card:hover::after { opacity: 1; }
+.hud-card .hud-br::before { bottom: -2px; left: -2px; border-width: 0 0 2px 2px; }
+.hud-card .hud-br::after  { bottom: -2px; right: -2px; border-width: 0 2px 2px 0; }
+.hud-card:hover .hud-br::before,
+.hud-card:hover .hud-br::after { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .scanlines::after { display: none; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
