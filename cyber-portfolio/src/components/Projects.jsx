@@ -1,27 +1,62 @@
 import { useRef, useState } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 
+const GH = 'https://github.com/Kaushik2210';
+
 const PROJECTS = [
   {
     id: 'proj-001',
-    title: 'CyberSentinel Dashboard',
-    description: 'Real-time threat monitoring dashboard with log analysis, alert triage, and SIEM integration. Built to visualize network anomalies and security events.',
-    tags: ['Python', 'React', 'Linux', 'SIEM'],
-    sample: true,
+    title: 'ORBITAL SENTINEL',
+    category: 'SPACE CYBERSECURITY',
+    description: 'Anomaly detection for space missions that tells cyberattacks apart from sensor faults, hardware failures and solar weather. Runs layered detectors over real NASA telemetry with explainable attribution, MITRE ATT&CK mapping and AI-written incident reports.',
+    tags: ['Python', 'PyTorch', 'ONNX', 'FastAPI', 'Next.js', 'MITRE ATT&CK'],
+    repo: `${GH}/ORBITAL-SENTINEL`,
+    featured: true,
   },
   {
     id: 'proj-002',
-    title: 'SecureVault CLI',
-    description: 'Command-line password manager with AES-256 encryption, master-password hashing, and clipboard auto-clear. Zero external API dependencies.',
-    tags: ['Python', 'Cryptography', 'Bash', 'CLI'],
-    sample: true,
+    title: 'Deepfake Detector',
+    category: 'TRUST & SAFETY / AI',
+    description: 'Synthetic-media detection platform that returns calibrated probabilities with visual evidence instead of a binary verdict. One detection core serves a web app, a Chrome extension and a REST API.',
+    tags: ['Python', 'PyTorch', 'FastAPI', 'Next.js', 'Computer Vision'],
+    repo: `${GH}/Deepfake-Detector`,
+    featured: true,
   },
   {
     id: 'proj-003',
-    title: 'AWS Threat Mapper',
-    description: 'Automated tool to audit AWS IAM policies, detect over-privileged roles, and generate compliance reports against CIS benchmarks.',
-    tags: ['AWS', 'Python', 'IAM', 'Security'],
-    sample: true,
+    title: 'PORTCULLIS',
+    category: 'LLM SECURITY',
+    description: 'Adversarial prompt-injection detection gateway that sits in front of LLM applications and screens incoming prompts before they reach the model.',
+    tags: ['Python', 'LLM Security', 'Prompt Injection', 'Gateway'],
+    repo: `${GH}/PORTCULLIS`,
+    featured: true,
+  },
+  {
+    id: 'proj-004',
+    title: 'GLYPHFORGE',
+    category: 'GRAPHICS / WEBGL',
+    description: 'GPU-native ASCII art engine for the browser. Converts photos to character grids using perceptual shape-matching, linear-light colour maths and Oklab clustering, rendered with a single GPU-instanced draw call.',
+    tags: ['TypeScript', 'React', 'WebGL', 'Canvas'],
+    repo: `${GH}/GLYPHFORGE`,
+    live: 'https://glyphforge-web.vercel.app',
+  },
+  {
+    id: 'proj-005',
+    title: 'AlgoVerse',
+    category: 'FULL-STACK / EDTECH',
+    description: 'DSA visualisation and interview-prep platform with 25 data-structure modules, 13 pattern guides, 635+ explained LeetCode solutions, gamified progress and a live leaderboard.',
+    tags: ['Next.js', 'TypeScript', 'Supabase', 'Tailwind CSS'],
+    repo: `${GH}/AlgoVerse`,
+    live: 'https://algoverse-lovat-seven.vercel.app',
+  },
+  {
+    id: 'proj-006',
+    title: 'gitVisualise',
+    category: 'DEVELOPER TOOLS / OPEN SOURCE',
+    description: 'Paste a GitHub link and get an interactive, narrated architecture tour of the repo. Ships as a website, CLI, Claude Code skill and GitHub Action with zero dependencies.',
+    tags: ['JavaScript', 'Node.js', 'GitHub Actions', 'Static Analysis'],
+    repo: `${GH}/gitVisualise`,
+    live: 'https://kaushik2210.github.io/gitVisualise/',
   },
 ];
 
@@ -70,7 +105,7 @@ function ProjectCard({ project, delay }) {
       onMouseLeave={() => handleHover(false)}
       className="hud-card"
       style={{
-        flex: '1 1 280px',
+        flex: '1 1 320px',
         border: `1px solid ${hovered ? 'rgba(0,240,255,0.5)' : 'rgba(57,255,20,0.15)'}`,
         background: 'rgba(13,17,23,0.85)',
         padding: '1.5rem',
@@ -82,21 +117,20 @@ function ProjectCard({ project, delay }) {
     >
       <div className="hud-br" />
 
-      {/* Sample badge */}
-      {project.sample && (
+      {project.featured && (
         <div style={{
           position: 'absolute',
           top: -1,
           right: 16,
-          background: '#ff003c',
-          color: '#fff',
+          background: '#39ff14',
+          color: '#0d1117',
           fontFamily: 'JetBrains Mono, monospace',
           fontSize: '0.58rem',
           padding: '2px 8px',
           letterSpacing: '0.1em',
-          fontWeight: 600,
+          fontWeight: 700,
         }}>
-          SAMPLE — REPLACE ME
+          FEATURED
         </div>
       )}
 
@@ -111,7 +145,7 @@ function ProjectCard({ project, delay }) {
         marginTop: '0.3rem',
         transition: 'color 0.2s',
       }}>
-        {project.id.toUpperCase()} &gt;
+        {project.id.toUpperCase()} // {project.category} &gt;
       </div>
 
       {/* Title */}
@@ -156,16 +190,29 @@ function ProjectCard({ project, delay }) {
         ))}
       </div>
 
-      {/* GitHub link */}
-      <a
-        href="https://github.com/Kaushik2210"
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`btn-terminal ${hovered ? 'btn-terminal-cyan' : ''}`}
-        style={{ fontSize: '0.72rem', padding: '0.4rem 1rem' }}
-      >
-        [ View on GitHub ]
-      </a>
+      {/* Links */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem' }}>
+        <a
+          href={project.repo}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`btn-terminal ${hovered ? 'btn-terminal-cyan' : ''}`}
+          style={{ fontSize: '0.72rem', padding: '0.4rem 1rem' }}
+        >
+          [ Source ]
+        </a>
+        {project.live && (
+          <a
+            href={project.live}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`btn-terminal ${hovered ? 'btn-terminal-cyan' : ''}`}
+            style={{ fontSize: '0.72rem', padding: '0.4rem 1rem' }}
+          >
+            [ Live Demo ]
+          </a>
+        )}
+      </div>
 
       {/* Glitch flash overlay on hover */}
       <AnimatePresence>
@@ -216,20 +263,23 @@ export default function Projects() {
         style={{
           fontFamily: 'JetBrains Mono, monospace',
           fontSize: '0.7rem',
-          color: '#ff003c',
-          opacity: 0.7,
+          color: '#8b949e',
           marginBottom: '2.5rem',
           letterSpacing: '0.05em',
         }}
       >
-        ⚠ SAMPLE PROJECTS — REPLACE BEFORE GOING LIVE
+        // selected work: security, AI and full-stack engineering
       </motion.p>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', maxWidth: 1100 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', maxWidth: 1200 }}>
         {PROJECTS.map((p, i) => (
           <ProjectCard key={p.id} project={p} delay={i * 0.12} />
         ))}
       </div>
+
+      <a href={GH + '?tab=repositories'} target="_blank" rel="noopener noreferrer" className="btn-terminal" style={{ display: 'inline-block', marginTop: '2rem', fontSize: '0.75rem' }}>
+        [ View all repositories ]
+      </a>
     </section>
   );
 }
