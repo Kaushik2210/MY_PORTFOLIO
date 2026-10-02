@@ -1,0 +1,7 @@
+{
+  "framework": null,
+  "installCommand": "npm install --prefix cyber-portfolio",
+  "buildCommand": "npm run build --prefix cyber-portfolio",
+  "outputDirectory": "cyber-portfolio/dist",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
