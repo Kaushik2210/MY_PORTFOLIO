@@ -1,11 +1,15 @@
 import { useRef, useState } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 
+const FILTERS = ['ALL', 'SECURITY', 'AI', 'WEB', 'TOOLS'];
+
 const GH = 'https://github.com/Kaushik2210';
 
 const PROJECTS = [
   {
     id: 'proj-001',
+    group: 'SECURITY',
+    highlights: ['Layered detectors with explainable attribution', 'Real NASA telemetry, CCSDS and MITRE ATT&CK mapping', 'AI-generated incident reports'],
     title: 'ORBITAL SENTINEL',
     category: 'SPACE CYBERSECURITY',
     description: 'Anomaly detection for space missions that tells cyberattacks apart from sensor faults, hardware failures and solar weather. Runs layered detectors over real NASA telemetry with explainable attribution, MITRE ATT&CK mapping and AI-written incident reports.',
@@ -15,6 +19,8 @@ const PROJECTS = [
   },
   {
     id: 'proj-002',
+    group: 'AI',
+    highlights: ['Calibrated probabilities, never a binary verdict', 'Visual evidence for every detection', 'Web app + Chrome extension + REST API on one core'],
     title: 'Deepfake Detector',
     category: 'TRUST & SAFETY / AI',
     description: 'Synthetic-media detection platform that returns calibrated probabilities with visual evidence instead of a binary verdict. One detection core serves a web app, a Chrome extension and a REST API.',
@@ -24,6 +30,8 @@ const PROJECTS = [
   },
   {
     id: 'proj-003',
+    group: 'SECURITY',
+    highlights: ['Screens prompts before they reach the model', 'Built for LLM application gateways'],
     title: 'PORTCULLIS',
     category: 'LLM SECURITY',
     description: 'Adversarial prompt-injection detection gateway that sits in front of LLM applications and screens incoming prompts before they reach the model.',
@@ -33,6 +41,8 @@ const PROJECTS = [
   },
   {
     id: 'proj-004',
+    group: 'WEB',
+    highlights: ['Perceptual shape-matching, not a brightness ramp', 'Oklab colour clustering', 'One GPU-instanced draw call'],
     title: 'GLYPHFORGE',
     category: 'GRAPHICS / WEBGL',
     description: 'GPU-native ASCII art engine for the browser. Converts photos to character grids using perceptual shape-matching, linear-light colour maths and Oklab clustering, rendered with a single GPU-instanced draw call.',
@@ -42,6 +52,8 @@ const PROJECTS = [
   },
   {
     id: 'proj-005',
+    group: 'WEB',
+    highlights: ['25 data-structure modules, 13 pattern guides', '635+ explained LeetCode solutions', 'Gamified progress with live leaderboard'],
     title: 'AlgoVerse',
     category: 'FULL-STACK / EDTECH',
     description: 'DSA visualisation and interview-prep platform with 25 data-structure modules, 13 pattern guides, 635+ explained LeetCode solutions, gamified progress and a live leaderboard.',
@@ -51,6 +63,8 @@ const PROJECTS = [
   },
   {
     id: 'proj-006',
+    group: 'TOOLS',
+    highlights: ['Interactive, narrated architecture tours', 'Website, CLI, Claude Code skill, GitHub Action', 'Zero dependencies'],
     title: 'gitVisualise',
     category: 'DEVELOPER TOOLS / OPEN SOURCE',
     description: 'Paste a GitHub link and get an interactive, narrated architecture tour of the repo. Ships as a website, CLI, Claude Code skill and GitHub Action with zero dependencies.',
@@ -106,6 +120,8 @@ function ProjectCard({ project, delay }) {
       className="hud-card"
       style={{
         flex: '1 1 320px',
+        maxWidth: 'calc(50% - 0.75rem)',
+        minWidth: 'min(320px, 100%)',
         border: `1px solid ${hovered ? 'rgba(0,240,255,0.5)' : 'rgba(57,255,20,0.15)'}`,
         background: 'rgba(13,17,23,0.85)',
         padding: '1.5rem',
@@ -174,6 +190,15 @@ function ProjectCard({ project, delay }) {
         {project.description}
       </p>
 
+      {/* Highlights */}
+      <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 1.2rem' }}>
+        {project.highlights.map(h => (
+          <li key={h} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem', color: '#c9d1d9', lineHeight: 1.8 }}>
+            <span style={{ color: hovered ? '#00f0ff' : '#39ff14' }}>▸ </span>{h}
+          </li>
+        ))}
+      </ul>
+
       {/* Tags */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '1.2rem' }}>
         {project.tags.map(tag => (
@@ -238,6 +263,8 @@ function ProjectCard({ project, delay }) {
 export default function Projects() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
+  const [filter, setFilter] = useState('ALL');
+  const visible = PROJECTS.filter(p => filter === 'ALL' || p.group === filter);
 
   return (
     <section id="projects" ref={ref} style={{ padding: 'clamp(4rem, 8vh, 7rem) clamp(1.5rem, 6vw, 5rem)', position: 'relative', zIndex: 1 }}>
@@ -271,8 +298,31 @@ export default function Projects() {
         // selected work: security, AI and full-stack engineering
       </motion.p>
 
+      <div role="tablist" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '2rem' }}>
+        {FILTERS.map(f => (
+          <button
+            key={f}
+            role="tab"
+            aria-selected={filter === f}
+            onClick={() => setFilter(f)}
+            style={{
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: '0.68rem',
+              letterSpacing: '0.1em',
+              padding: '0.35rem 0.9rem',
+              background: filter === f ? 'rgba(57,255,20,0.12)' : 'transparent',
+              color: filter === f ? '#39ff14' : '#8b949e',
+              border: `1px solid ${filter === f ? '#39ff14' : 'rgba(139,148,158,0.3)'}`,
+              cursor: 'none',
+            }}
+          >
+            {filter === f ? '> ' : ''}{f}
+          </button>
+        ))}
+      </div>
+
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', maxWidth: 1200 }}>
-        {PROJECTS.map((p, i) => (
+        {visible.map((p, i) => (
           <ProjectCard key={p.id} project={p} delay={i * 0.12} />
         ))}
       </div>
